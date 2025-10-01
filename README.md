@@ -13,6 +13,10 @@ python data/snake/snake.py
 
 All data is stored in the [data/](data) folder. See the [README.md](data/README.md) there for details about the data.
 
+Run `python scripts/generate_dataset.py` to generate a `output\dataset.json` file containing instruct-formatted fine-tuning data.
+
+`docs/` folder contains guides (WIP) for running fine-tuning.
+
 ## Results
 
 This README will be updated over time with the results of fine-tuning experiments, links to models, etc.
