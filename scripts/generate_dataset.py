@@ -1,10 +1,11 @@
 """
 This script takes the pygame scripts from the data directory and formats them
-into an alpaca instruct json file.
+into a JSONL file compatible with Together.ai fine-tuning.
 """
 
 import json
 from pathlib import Path
+
 
 def format_create_game(script_content: str, create_prompt: str):
     """
@@ -33,18 +34,21 @@ def format_create_game(script_content: str, create_prompt: str):
     create_input = f"Create a game: {content}"
 
     return {
-        "instruction": create_instructions,
-        "input": create_input,
-        "output": script_content
+        "messages": [
+            {"role": "system", "content": create_instructions},
+            {"role": "user", "content": create_input},
+            {"role": "assistant", "content": script_content},
+        ]
     }
+
 
 def format_remix_game(script_content: str, base_game_content: str, remix_prompt: str):
     """
     Format a remix script into instruct data.
 
     Args:
-        script_path: path on disk to the remix script .py file
-        base_game_path: path on disk to the base game script .py file that was remixed
+        script_content: The content of the remix script file
+        base_game_content: The content of the base game script that was remixed
         remix_prompt: Infinity Arcade prompt for the remix
     """
 
@@ -78,45 +82,51 @@ def format_remix_game(script_content: str, base_game_content: str, remix_prompt:
     Provide the complete modified game code."""
 
     return {
-        "instruction": remix_instructions,
-        "input": remix_input,
-        "output": script_content
+        "messages": [
+            {"role": "system", "content": remix_instructions},
+            {"role": "user", "content": remix_input},
+            {"role": "assistant", "content": script_content},
+        ]
     }
 
 
 def route_script_to_formatter(script_path: Path):
     """
     Route a script file to the appropriate formatter based on its content.
-    
+
     Args:
         script_path: Path to the script file to process
-        
+
     Returns:
         Dict containing the formatted instruction data
     """
     # Read the script content
-    script_content = script_path.read_text(encoding='utf-8')
-    
+    script_content = script_path.read_text(encoding="utf-8")
+
     # Check if it's a remix game by looking for SOURCE and REMIX comments
     lines = script_content.splitlines()
-    
-    if len(lines) >= 2 and lines[0].startswith("# SOURCE:") and lines[1].startswith("# REMIX:"):
+
+    if (
+        len(lines) >= 2
+        and lines[0].startswith("# SOURCE:")
+        and lines[1].startswith("# REMIX:")
+    ):
         # This is a remix game
         source_filename = lines[0].replace("# SOURCE:", "").strip()
         remix_prompt = lines[1].replace("# REMIX:", "").strip()
-        
+
         # Strip the first 3 lines (SOURCE comment, REMIX comment, and empty line)
-        stripped_content = '\n'.join(lines[3:])
-        
+        stripped_content = "\n".join(lines[3:])
+
         # Find the base game file in the same directory
         base_game_path = script_path.parent / source_filename
-        
+
         if not base_game_path.exists():
             raise FileNotFoundError(f"Base game file not found: {base_game_path}")
-        
+
         # Read the base game content
-        base_game_content = base_game_path.read_text(encoding='utf-8')
-        
+        base_game_content = base_game_path.read_text(encoding="utf-8")
+
         return format_remix_game(stripped_content, base_game_content, remix_prompt)
     else:
         # This is a create game
@@ -126,12 +136,12 @@ def route_script_to_formatter(script_path: Path):
 
 def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
     """
-    Generate a JSON dataset from all pygame scripts in the data directory.
-    
+    Generate a JSONL dataset from all pygame scripts in the data directory.
+
     Args:
         data_dir: Path to the data directory (defaults to ../data relative to script)
-        output_file: Path for the output JSON file (defaults to dataset.json in current dir)
-    
+        output_file: Path for the output JSONL file (defaults to dataset.jsonl in output dir)
+
     Returns:
         List of formatted instruction data dictionaries
     """
@@ -139,20 +149,20 @@ def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
         # Default to data directory relative to this script
         script_dir = Path(__file__).parent
         data_dir = script_dir.parent / "data"
-    
+
     if output_file is None:
         # Create output directory if it doesn't exist
         output_dir = Path("output")
         output_dir.mkdir(exist_ok=True)
-        output_file = output_dir / "dataset.json"
-    
+        output_file = output_dir / "dataset.jsonl"
+
     dataset = []
-    
+
     # Iterate through all subdirectories in data/
     for game_dir in data_dir.iterdir():
         if game_dir.is_dir():
             print(f"Processing {game_dir.name}...")
-            
+
             # Find all .py files in this game directory
             for script_file in game_dir.glob("*.py"):
                 try:
@@ -162,14 +172,16 @@ def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
                 except Exception as e:
                     print(f"  Error processing {script_file}: {e}")
                     continue
-    
-    # Write the dataset to JSON file
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(dataset, f, indent=2, ensure_ascii=False)
-    
+
+    # Write the dataset to JSONL file (one JSON object per line)
+    with open(output_file, "w", encoding="utf-8") as f:
+        for entry in dataset:
+            json.dump(entry, f, ensure_ascii=False)
+            f.write("\n")
+
     print(f"\nDataset generated with {len(dataset)} entries")
     print(f"Output saved to: {output_file.absolute()}")
-    
+
     return dataset
 
 
