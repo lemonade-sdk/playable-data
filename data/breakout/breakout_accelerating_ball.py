@@ -1,3 +1,6 @@
+# SOURCE: breakout.py
+# REMIX: ball speeds up on each hit
+
 """
 Breakout Accelerating Ball - A remix of the classic brick-breaking game where the ball gets faster every time it hits the paddle.
 The ball bounces off the paddle and walls, destroying bricks on contact. Game ends when all bricks are destroyed

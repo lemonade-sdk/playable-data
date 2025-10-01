@@ -1,3 +1,6 @@
+# SOURCE: asteroids.py
+# REMIX: use rainbow colors
+
 """
 Asteroids Rainbow Remix
 

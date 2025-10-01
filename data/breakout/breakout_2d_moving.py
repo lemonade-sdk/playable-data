@@ -1,3 +1,6 @@
+# SOURCE: breakout_2d_paddle.py
+# REMIX: make the bricks move
+
 """
 Breakout 2D Moving - A remix combining 2D paddle movement and moving bricks mechanics.
 The paddle can move in both horizontal and vertical directions, while bricks slowly move side to side.

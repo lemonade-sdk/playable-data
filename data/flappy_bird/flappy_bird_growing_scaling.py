@@ -1,3 +1,6 @@
+# SOURCE: flappy_bird_growing.py
+# REMIX: pipes rotate and scale
+
 """
 Flappy Bird Growing Scaling - A remix combining growing bird and scaling pipes mechanics.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends on collision with pipes or ground.

@@ -1,3 +1,6 @@
+# SOURCE: space_invaders.py
+# REMIX: invaders shoot back
+
 """
 Space Invaders - Shooting Back Remix
 

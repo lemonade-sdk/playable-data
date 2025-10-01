@@ -1,3 +1,6 @@
+# SOURCE: space_invaders_2d_continuous.py
+# REMIX: use rainbow colors for invaders
+
 """
 Space Invaders - 2D Movement + Continuous Shooting + Rainbow Invaders Triple Combo
 

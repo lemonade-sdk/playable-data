@@ -1,3 +1,6 @@
+# SOURCE: flappy_bird_coins.py
+# REMIX: give 3 lives
+
 """
 Flappy Bird Coins Lives - A remix combining collectible coins and three lives system.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends when all lives are lost.

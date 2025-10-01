@@ -1,3 +1,6 @@
+# SOURCE: breakout_accelerating_paddle.py
+# REMIX: spawn new balls periodically
+
 """
 Breakout Accelerating Multiball - A remix combining accelerating paddle and multiball mechanics.
 The paddle gets faster with each ball hit, while new balls spawn periodically creating chaos.

@@ -1,3 +1,6 @@
+# SOURCE: space_invaders.py
+# REMIX: give player 3 lives
+
 """
 Space Invaders - Three Lives Remix
 

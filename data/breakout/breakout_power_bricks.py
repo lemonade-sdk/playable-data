@@ -1,3 +1,6 @@
+# SOURCE: breakout.py
+# REMIX: add power-up bricks
+
 """
 Breakout Power Bricks Remix - A remix of the original Breakout with special power-up bricks.
 The player controls a paddle to bounce a ball and destroy bricks. Some bricks contain power-ups

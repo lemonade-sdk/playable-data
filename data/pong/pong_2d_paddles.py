@@ -1,3 +1,6 @@
+# SOURCE: pong.py
+# REMIX: paddles can move in 2 dimensions
+
 """
 Pong Game - 2D Paddles Remix
 

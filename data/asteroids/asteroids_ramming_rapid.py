@@ -1,3 +1,6 @@
+# SOURCE: asteroids_ramming.py
+# REMIX: hold space to rapid fire
+
 """
 Asteroids Ramming Rapid - A remix combining ramming mechanics and rapid fire shooting.
 The ship can bulldoze through asteroids for points but must stay within screen boundaries.

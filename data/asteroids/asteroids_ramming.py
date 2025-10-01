@@ -1,3 +1,6 @@
+# SOURCE: asteroids.py
+# REMIX: ram asteroids to destroy them
+
 """
 Asteroids Ramming Remix
 

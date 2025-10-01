@@ -1,3 +1,6 @@
+# SOURCE: space_invaders_continuous_shooting.py
+# REMIX: use rainbow colors for invaders
+
 """
 Space Invaders - Continuous Shooting + Rainbow Invaders Combo
 

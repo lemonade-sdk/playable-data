@@ -11,6 +11,9 @@ These folders contain:
 
 ## PyGame scripts
 The format of each script is:
+- For remix scripts only: Two single-line comments at the top:
+  - `# SOURCE: filename.py` - The base script that generated this remix
+  - `# REMIX: brief description` - A minimal prompt describing the remix
 - A docstring that gives a brief description of the game and its mechanics from an implementation point of view.
 - A complete implementation of a single game, written in Python and using `pygame` as the only external dependence.
 
@@ -43,6 +46,10 @@ Great! Next, I want you to "remix" this game into a new file in the same folder.
 
 Remix: make the food move to random adjacent positions on each update.
 
+Add these comments at the very top of the file:
+# SOURCE: snake.py
+# REMIX: make the food move
+
 The docstring of the new file should mention that this remix took place relative to the original game.
 ```
 
@@ -56,10 +63,18 @@ To generate game scripts that contain two remix ideas:
 ok great! now go through the space invaders remixes and make 5 new remix files
 
 these new remixes should use one of the existing remix files as the base code, and apply one of the other remix ideas as a minimal modification on top of the base.
+
+For each new file, add SOURCE and REMIX comments at the top:
+# SOURCE: existing_remix_file.py
+# REMIX: brief description of the new modification being added
 ```
 
 To generate game scripts that have three remix ideas:
 
 ```
 great! along the lines of the last exercise, make 4 files that contian 3 remix ideas. base these files on existing double-remix files.
+
+For each new file, add SOURCE and REMIX comments at the top:
+# SOURCE: existing_double_remix_file.py  
+# REMIX: brief description of the third modification being added
 ```

@@ -1,3 +1,6 @@
+# SOURCE: asteroids.py
+# REMIX: hold space to rapid fire
+
 """
 Asteroids Rapid Fire Remix
 

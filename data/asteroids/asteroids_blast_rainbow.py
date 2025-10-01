@@ -1,3 +1,6 @@
+# SOURCE: asteroids_blast.py
+# REMIX: use rainbow colors
+
 """
 Asteroids Blast Rainbow - A remix combining blast ability and rainbow visual effects.
 Press Enter to destroy all asteroids within 150 pixels of your ship with a spectacular blast!

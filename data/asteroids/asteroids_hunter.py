@@ -1,3 +1,6 @@
+# SOURCE: asteroids.py
+# REMIX: add an enemy that chases you
+
 """
 Asteroids Hunter Remix
 

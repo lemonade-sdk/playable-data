@@ -1,3 +1,6 @@
+# SOURCE: asteroids.py
+# REMIX: press enter to blast the asteroids near the ship
+
 """
 Asteroids Blast Remix
 

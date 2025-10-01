@@ -1,3 +1,6 @@
+# SOURCE: pong_vs_computer.py
+# REMIX: ball speeds up on each hit
+
 """
 Pong Game - Ultimate Challenge Remix
 

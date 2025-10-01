@@ -1,3 +1,6 @@
+# SOURCE: pong.py
+# REMIX: ball speeds up on each hit
+
 """
 Pong Game - Accelerating Ball Remix
 

@@ -1,3 +1,6 @@
+# SOURCE: space_invaders_2d_movement.py
+# REMIX: hold space to continuous shoot
+
 """
 Space Invaders - 2D Movement + Continuous Shooting Combo
 

@@ -1,3 +1,6 @@
+# SOURCE: snake.py
+# REMIX: game speeds up when you eat food
+
 """
 Snake Game - Accelerating Speed Remix
 

@@ -1,3 +1,6 @@
+# SOURCE: pong.py
+# REMIX: paddles shrink when they hit the ball
+
 """
 Pong Game - Shrinking Paddles Remix
 

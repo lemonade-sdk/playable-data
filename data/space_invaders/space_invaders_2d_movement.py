@@ -1,3 +1,6 @@
+# SOURCE: space_invaders.py
+# REMIX: player can move up and down
+
 """
 Space Invaders - 2D Movement Remix
 

@@ -1,3 +1,6 @@
+# SOURCE: flappy_bird.py
+# REMIX: add collectible coins
+
 """
 Flappy Bird Coins Remix - A remix of the original Flappy Bird game with collectible coins for bonus score.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends on collision with pipes or ground.

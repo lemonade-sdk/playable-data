@@ -1,3 +1,6 @@
+# SOURCE: snake.py
+# REMIX: make the food move
+
 """
 Snake Game - Moving Food Remix
 

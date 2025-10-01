@@ -1,3 +1,6 @@
+# SOURCE: space_invaders.py
+# REMIX: hold space to continuous shoot
+
 """
 Space Invaders - Continuous Shooting Remix
 

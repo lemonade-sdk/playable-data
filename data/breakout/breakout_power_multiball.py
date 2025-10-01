@@ -1,3 +1,6 @@
+# SOURCE: breakout_power_bricks.py
+# REMIX: add multiball power-up
+
 """
 Breakout Power Multiball Remix - A remix of the Power Bricks Breakout with an additional multiball power-up.
 The player controls a paddle to bounce balls and destroy bricks. Some bricks contain power-ups

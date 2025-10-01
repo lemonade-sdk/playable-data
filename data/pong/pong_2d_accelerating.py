@@ -1,3 +1,6 @@
+# SOURCE: pong_2d_paddles.py
+# REMIX: ball speeds up on each hit
+
 """
 Pong Game - 2D Accelerating Ball Remix
 

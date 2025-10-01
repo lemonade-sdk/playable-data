@@ -1,3 +1,6 @@
+# SOURCE: pong_2d_accelerating.py
+# REMIX: double the acceleration rate
+
 """
 Pong Game - 2D Super Accelerating Ball Remix
 

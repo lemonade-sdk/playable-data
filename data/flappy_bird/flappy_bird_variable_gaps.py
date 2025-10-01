@@ -1,3 +1,6 @@
+# SOURCE: flappy_bird.py
+# REMIX: randomize pipe gap sizes
+
 """
 Flappy Bird Variable Gaps Remix - A remix of the original Flappy Bird with varying pipe gap sizes.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends on collision with pipes or ground.

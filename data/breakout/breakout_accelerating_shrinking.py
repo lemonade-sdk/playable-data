@@ -1,3 +1,6 @@
+# SOURCE: breakout_accelerating_ball.py
+# REMIX: paddle shrinks
+
 """
 Breakout Accelerating Shrinking - A remix combining accelerating ball and shrinking paddle mechanics.
 The ball gets faster every time it hits the paddle, while the paddle shrinks each time a brick is destroyed.

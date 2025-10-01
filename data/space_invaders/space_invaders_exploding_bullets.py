@@ -1,3 +1,6 @@
+# SOURCE: space_invaders.py
+# REMIX: add exploding bullets powerup
+
 """
 Space Invaders - Exploding Bullets Remix
 

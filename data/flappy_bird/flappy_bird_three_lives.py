@@ -1,3 +1,6 @@
+# SOURCE: flappy_bird.py
+# REMIX: give the player 3 lives
+
 """
 Flappy Bird Three Lives Remix - A remix of the original Flappy Bird with a 3-lives system.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends when all lives are lost.

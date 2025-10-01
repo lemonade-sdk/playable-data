@@ -1,3 +1,6 @@
+# SOURCE: space_invaders.py
+# REMIX: use rainbow colors for invaders
+
 """
 Space Invaders - Rainbow Invaders Remix
 

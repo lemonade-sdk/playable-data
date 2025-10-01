@@ -1,3 +1,6 @@
+# SOURCE: snake.py
+# REMIX: add a second player
+
 """
 Snake Game - Two Player Remix
 

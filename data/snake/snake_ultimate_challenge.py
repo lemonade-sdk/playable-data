@@ -1,3 +1,6 @@
+# SOURCE: snake_moving_food.py
+# REMIX: add an enemy that chases you
+
 """
 Snake Game - Ultimate Challenge Remix
 

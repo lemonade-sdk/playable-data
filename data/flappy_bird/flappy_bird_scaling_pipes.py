@@ -1,3 +1,6 @@
+# SOURCE: flappy_bird.py
+# REMIX: pipes rotate and scale
+
 """
 Flappy Bird Scaling Pipes Remix - A remix of the original Flappy Bird with scaling pipe obstacles.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends on collision with pipes or ground.

@@ -1,3 +1,6 @@
+# SOURCE: breakout.py
+# REMIX: make the bricks move
+
 """
 Breakout Moving Bricks Remix - A remix of the original Breakout where bricks slowly move side to side.
 The player controls a paddle to bounce a ball and destroy moving bricks. Bricks oscillate horizontally,

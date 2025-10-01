@@ -1,3 +1,6 @@
+# SOURCE: asteroids.py
+# REMIX: make the bullets explode
+
 """
 Asteroids Explosive Remix
 

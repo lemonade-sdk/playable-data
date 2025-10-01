@@ -1,3 +1,6 @@
+# SOURCE: breakout.py
+# REMIX: paddle can move in 2 dimensions
+
 """
 Breakout 2D Paddle - A remix of the classic brick-breaking game where the paddle can move in both horizontal and vertical directions.
 The ball bounces off the paddle and walls, destroying bricks on contact. Game ends when all bricks are destroyed

@@ -1,3 +1,6 @@
+# SOURCE: space_invaders_lives_shooting_back.py
+# REMIX: make invaders move faster
+
 """
 Space Invaders - Three Lives + Shooting Back + Faster Invaders Triple Combo
 

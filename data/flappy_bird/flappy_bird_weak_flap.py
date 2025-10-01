@@ -1,3 +1,6 @@
+# SOURCE: flappy_bird.py
+# REMIX: weaker flap strength
+
 """
 Flappy Bird Weak Flap Remix - A remix of the original Flappy Bird with reduced jump height per flap.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends on collision with pipes or ground.

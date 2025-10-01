@@ -1,3 +1,6 @@
+# SOURCE: asteroids_hunter.py
+# REMIX: hold space to rapid fire
+
 """
 Asteroids Hunter Rapid - A remix combining enemy hunter and rapid fire mechanics.
 A relentless red enemy constantly chases your ship while you defend with rapid-fire bullets!

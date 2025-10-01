@@ -1,3 +1,6 @@
+# SOURCE: breakout_accelerating_ball.py
+# REMIX: paddle also speeds up
+
 """
 Breakout Accelerating Paddle - A remix of the accelerating ball game where both the ball and paddle get faster on each hit.
 The ball bounces off the paddle and walls, destroying bricks on contact. Game ends when all bricks are destroyed

@@ -1,3 +1,6 @@
+# SOURCE: snake_enemy_chase.py
+# REMIX: add a second enemy
+
 """
 Snake Game - Dual Enemies Remix
 

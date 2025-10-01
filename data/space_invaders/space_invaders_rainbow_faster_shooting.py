@@ -1,3 +1,6 @@
+# SOURCE: space_invaders_rainbow_faster.py
+# REMIX: invaders shoot back
+
 """
 Space Invaders - Rainbow Invaders + Faster Movement + Shooting Back Triple Combo
 

@@ -1,3 +1,6 @@
+# SOURCE: snake.py
+# REMIX: add an enemy that chases you
+
 """
 Snake Game - Enemy Chase Remix
 

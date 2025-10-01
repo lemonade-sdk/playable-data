@@ -1,3 +1,6 @@
+# SOURCE: flappy_bird_realistic.py
+# REMIX: add collectible coins
+
 """
 Flappy Bird Realistic Coins - A remix combining realistic bird visuals and collectible coins.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends on collision with pipes or ground.

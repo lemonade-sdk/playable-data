@@ -1,3 +1,6 @@
+# SOURCE: space_invaders_exploding_2d.py
+# REMIX: give player 3 lives
+
 """
 Space Invaders - Exploding Bullets + 2D Movement + Three Lives Triple Combo
 

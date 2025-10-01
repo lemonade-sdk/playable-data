@@ -1,3 +1,6 @@
+# SOURCE: space_invaders_rainbow_invaders.py
+# REMIX: make invaders move faster
+
 """
 Space Invaders - Rainbow Invaders + Faster Movement Combo
 

@@ -1,3 +1,6 @@
+# SOURCE: space_invaders.py
+# REMIX: make invaders move faster
+
 """
 Space Invaders - Faster Invaders Remix
 
@@ -7,7 +10,6 @@ Based on the original space_invaders.py implementation.
 """
 
 import pygame
-import random
 import sys
 
 # Initialize pygame

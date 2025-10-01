@@ -1,3 +1,6 @@
+# SOURCE: breakout.py
+# REMIX: paddle shrinks when bricks destroyed
+
 """
 Breakout Shrinking Paddle Remix - A remix of the original Breakout where the paddle shrinks over time.
 The player controls a paddle that gradually becomes smaller, making the game progressively more difficult.

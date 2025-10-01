@@ -1,3 +1,6 @@
+# SOURCE: flappy_bird.py
+# REMIX: bird grows as you score
+
 """
 Flappy Bird Growing Remix - A remix of the original Flappy Bird where the bird grows larger as score increases.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends on collision with pipes or ground.

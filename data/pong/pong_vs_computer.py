@@ -1,3 +1,6 @@
+# SOURCE: pong.py
+# REMIX: play against AI opponent
+
 """
 Pong Game - VS Computer Remix
 

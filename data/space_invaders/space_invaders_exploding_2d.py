@@ -1,3 +1,6 @@
+# SOURCE: space_invaders_exploding_bullets.py
+# REMIX: player can move up and down
+
 """
 Space Invaders - Exploding Bullets + 2D Movement Combo
 

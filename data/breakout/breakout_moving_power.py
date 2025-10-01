@@ -1,3 +1,6 @@
+# SOURCE: breakout_moving_bricks.py
+# REMIX: add power-up bricks
+
 """
 Breakout Moving Power - A remix combining moving bricks and power bricks mechanics.
 Bricks slowly move side to side while some contain power-ups that enhance gameplay.

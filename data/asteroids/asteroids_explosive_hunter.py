@@ -1,3 +1,6 @@
+# SOURCE: asteroids_explosive.py
+# REMIX: add an enemy that chases you
+
 """
 Asteroids Explosive Hunter - A remix combining explosive bullets and enemy hunter mechanics.
 The ship fires slower but each bullet creates devastating explosions on impact.

@@ -1,3 +1,6 @@
+# SOURCE: flappy_bird_weak_flap.py
+# REMIX: randomize pipe gap sizes
+
 """
 Flappy Bird Weak Variable - A remix combining weak flap mechanics and variable gap sizes.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends on collision with pipes or ground.

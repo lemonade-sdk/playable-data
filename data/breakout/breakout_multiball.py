@@ -1,3 +1,6 @@
+# SOURCE: breakout.py
+# REMIX: spawn new balls periodically
+
 """
 Breakout Multiball Remix - A remix of the original Breakout with multiple balls in play.
 The player controls a paddle to bounce balls and destroy bricks. New balls spawn periodically,

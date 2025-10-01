@@ -1,3 +1,6 @@
+# SOURCE: space_invaders_three_lives.py
+# REMIX: invaders shoot back
+
 """
 Space Invaders - Three Lives + Shooting Back Combo
 
