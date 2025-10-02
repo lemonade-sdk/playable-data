@@ -33,11 +33,14 @@ def format_create_game(script_content: str, create_prompt: str):
 
     create_input = f"Create a game: {content}"
 
+    # Format the output as a markdown code block
+    formatted_output = f"```python\n{script_content}\n```"
+
     return {
         "messages": [
             {"role": "system", "content": create_instructions},
             {"role": "user", "content": create_input},
-            {"role": "assistant", "content": script_content},
+            {"role": "assistant", "content": formatted_output},
         ]
     }
 
@@ -81,11 +84,14 @@ def format_remix_game(script_content: str, base_game_content: str, remix_prompt:
 
     Provide the complete modified game code."""
 
+    # Format the output as a markdown code block
+    formatted_output = f"```python\n{script_content}\n```"
+
     return {
         "messages": [
             {"role": "system", "content": remix_instructions},
             {"role": "user", "content": remix_input},
-            {"role": "assistant", "content": script_content},
+            {"role": "assistant", "content": formatted_output},
         ]
     }
 
@@ -160,7 +166,7 @@ def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
 
     # Iterate through all subdirectories in data/
     for game_dir in data_dir.iterdir():
-        if game_dir.is_dir():
+        if game_dir.is_dir() and not game_dir.name.startswith("_"):
             print(f"Processing {game_dir.name}...")
 
             # Find all .py files in this game directory

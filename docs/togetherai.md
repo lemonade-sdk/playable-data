@@ -49,6 +49,7 @@
     1. Recipe: `llamacpp`
 
 ## Run in Infinity Arcade
+
 1. Load up your Infinity Arcade environment
 1. $env:INFINITY_ARCADE_MODEL="user.Qwen2.5-7B-Instruct-iat-00-GGUF"
 1. infinity-arcade

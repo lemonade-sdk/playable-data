@@ -6,8 +6,11 @@ This README gives an overview of the folders and files, as well as the LLM promp
 
 These folders contain:
 - A base game script, whose name matches the name of the folder (e.g., space_invaders/space_invaders.py).
+- Multiple base game variants (e.g., asteroids_1.py, asteroids_2.py, etc.) - different implementations of the same base game with varied coding styles, visual choices, and game balance.
 - A few remix scripts, which use the base script as a starting point and then make some modification to the game.
 - A few remixes-of-remixes.
+
+> Note: an underscore `_` in the directory name indicates that the directory should be skipped. This is useful for game data that is not fully ready yet.
 
 ## PyGame scripts
 The format of each script is:
@@ -35,6 +38,53 @@ This script will be a reference design for an entry-level game design student, s
 Make the graphics minimal. Use black as the primary background color and rgb(0, 255, 65) as the primary accent color.
 
 Add a docstring to the top of the file with the game's name and a very concise description of the mechanics and implementation from the programmer's point of view.
+```
+
+### Base Game Variants Prompt
+
+This prompt creates multiple variant implementations of a base game, simulating different student solutions to the same assignment. Each variant uses the same core OOP approach but differs in natural ways. Replace `snake` with any game name.
+
+```
+I need you to create 4 additional variants of the Snake game (<game>_1.py through <game>_4.py). These should feel like 4 different students all attended the same class, learned the same OOP principles, and completed the same homework assignment to make this game in pygame.
+
+All variants must:
+- Follow the base game rules (black background, green color rgb(0, 255, 65), R to restart, Q to quit, X to close)
+- Use object-oriented design with classes for the main game entities
+- Be clear and understandable for entry-level game design students
+- Include a docstring describing the game
+
+Vary these details naturally across the 4 variants (like different students would):
+
+1. Variable/function naming conventions
+   - Different naming styles within snake_case convention
+   - Method names: update() vs move() vs advance() vs tick()
+   - Class attribute names reflecting personal preference
+
+2. Visual representation choices
+   - Shape/rendering differences for game entities
+   - Screen dimensions (e.g., 800x600 vs 600x600 vs 900x700)
+   - Size and proportions of game elements
+
+3. Code organization
+   - Some put all constants at top, others define near usage
+   - Different method ordering (alphabetical vs logical grouping)
+   - Varying levels of helper functions vs inline code
+
+4. Game balance/tuning
+   - Different starting conditions and difficulty parameters
+   - Speed, acceleration, or movement values
+   - Scoring systems and point values
+   - Spawn rates, quantities, or timing
+
+5. Minor mechanic differences
+   - Input handling variations (continuous vs discrete)
+   - Different values for friction, drag, or damping
+   - Alternative collision detection approaches (all achieving same result)
+   - Edge behavior variations (wrap vs bounce, when applicable)
+
+Example for Asteroids specifically: Ship could be triangle vs diamond shape, asteroids as circles vs irregular polygons, starting with 3-6 asteroids, one shot per press vs continuous fire with cooldown, scoring as size*20 vs (4-tier)*15.
+
+Make each variant feel authentic - like a real student's work with their own preferences and interpretations, but all demonstrating good OOP practices.
 ```
 
 ### Remix Prompt
