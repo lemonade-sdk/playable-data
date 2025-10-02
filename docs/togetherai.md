@@ -38,7 +38,7 @@
 1. cd llama.cpp/
 1. python convert_hf_to_gguf.py /path/to/model
     1. We'll refer to this result as model-f16.gguf
-1. cd .\bin\Release\
+1. cd build\bin\Release\
 1. ./llama-quantize path/to/model-f16.gguf path/to/model-q4_k_m.gguf Q4_K_M
 
 ## Upload to HF
@@ -123,6 +123,130 @@ LR scheduler type:
 cosine
 Min LR ratio:
 0.05
+Scheduler cycles:
+1
+```
+
+### Result
+
+iat-01 showed an increased capability to handle space invaders and breakout, but struggled with pong and snake.
+
+## iat-02
+
+For this run we just tweaked the training settings relative to iat-01.
+
+```
+Model:
+Qwen/Qwen2.5-7B-Instruct
+Training file:
+dataset_01.jsonl
+Suffix:
+iat-02
+Training type:
+LoRA
+LoRA rank:
+32
+LoRA alpha:
+64
+LoRA dropout:
+0.05
+LoRA trainable modules:
+all-linear
+Training method:
+SFT
+Train on inputs:
+false
+Epochs:
+5
+Checkpoints:
+1
+Evaluations:
+1
+Batch size:
+8
+Learning rate:
+0.00005
+Warmup ratio:
+0.03
+Max gradient norm:
+1
+Weight decay:
+0
+LR scheduler type:
+cosine
+Min LR ratio:
+0.05
+Scheduler cycles:
+1
+```
+
+### Result
+
+- In pong the paddles are sideways.
+- Snake works.
+- Flappy bird and space invaders build with errors.
+- Breakout works, and remixes work.
+
+## iat-03
+
+iat-03 uses the same parameters as iat-02, but greatly increases the amount of base games in the fine-tuning data.
+
+The new base games were created by creating "oneshot" versions of the remix data previously available.
+
+============================================================
+DATASET STATISTICS
+============================================================
+Game Type            Count           Lines of Code
+------------------------------------------------------------
+Base Games           92              20,883
+Remix Games          62              14,984
+------------------------------------------------------------
+TOTAL                154             35,867
+============================================================
+
+This dataset also fixes a bug where base game variants would have an index number in the prompt.
+
+```
+Model:
+Qwen/Qwen2.5-7B-Instruct
+Training file:
+dataset_03.jsonl
+Suffix:
+iat-03
+Training type:
+LoRA
+LoRA rank:
+32
+LoRA alpha:
+64
+LoRA dropout:
+0.05
+LoRA trainable modules:
+all-linear
+Training method:
+SFT
+Train on inputs:
+false
+Epochs:
+5
+Checkpoints:
+1
+Evaluations:
+1
+Batch size:
+8
+Learning rate:
+0.00005
+Warmup ratio:
+0.03
+Max gradient norm:
+1
+Weight decay:
+0
+LR scheduler type:
+cosine
+Min LR ratio:
+0
 Scheduler cycles:
 1
 ```
