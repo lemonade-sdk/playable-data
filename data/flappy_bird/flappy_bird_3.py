@@ -1,3 +1,5 @@
+# CREATE: flappy bird
+
 """
 Flappy Bird - Classic bird navigation game through pipe obstacles.
 Control a bird that falls due to gravity by pressing spacebar to flap upward.

@@ -1,3 +1,5 @@
+# CREATE: breakout
+
 """
 Breakout - A paddle and ball brick breaking game.
 Control the paddle with arrow keys to bounce the ball and destroy all the bricks.

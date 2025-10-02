@@ -142,8 +142,19 @@ def route_script_to_formatter(script_path: Path):
             "remix",
             line_count,
         )
+    elif len(lines) >= 1 and lines[0].startswith("# CREATE:"):
+        # This is a create game with an explicit CREATE prompt
+        create_prompt = lines[0].replace("# CREATE:", "").strip()
+
+        # Strip the first 2 lines (CREATE comment and empty line)
+        stripped_content = "\n".join(lines[2:])
+        line_count = len(
+            [line for line in stripped_content.splitlines() if line.strip()]
+        )
+
+        return format_create_game(stripped_content, create_prompt), "base", line_count
     else:
-        # This is a create game
+        # This is a create game without explicit CREATE comment (backward compatibility)
         create_prompt = script_path.stem.replace("_", " ")
         line_count = len([line for line in lines if line.strip()])
         return format_create_game(script_content, create_prompt), "base", line_count

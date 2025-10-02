@@ -1,3 +1,5 @@
+# CREATE: flappy bird
+
 """
 Flappy Bird - A simple side-scrolling game where the player controls a bird that must navigate through pipes.
 The bird falls due to gravity and flaps upward when spacebar is pressed. Game ends on collision with pipes or ground.

@@ -1,3 +1,5 @@
+# CREATE: asteroids
+
 """
 Asteroids Game
 

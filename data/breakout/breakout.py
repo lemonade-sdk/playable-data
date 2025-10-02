@@ -1,3 +1,5 @@
+# CREATE: breakout
+
 """
 Breakout - A classic brick-breaking game where the player controls a paddle to bounce a ball and destroy bricks.
 The ball bounces off the paddle and walls, destroying bricks on contact. Game ends when all bricks are destroyed

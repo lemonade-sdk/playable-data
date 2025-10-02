@@ -1,3 +1,5 @@
+# CREATE: flappy bird
+
 """
 Flappy Bird - A bird flying game where you navigate through pipe gaps.
 The bird is affected by gravity and you must tap spacebar to make it fly upward.

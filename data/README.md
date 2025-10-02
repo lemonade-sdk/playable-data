@@ -9,6 +9,7 @@ These folders contain:
 - Multiple base game variants (e.g., asteroids_1.py, asteroids_2.py, etc.) - different implementations of the same base game with varied coding styles, visual choices, and game balance.
 - A few remix scripts, which use the base script as a starting point and then make some modification to the game.
 - A few remixes-of-remixes.
+- Oneshot scripts (ending in `_oneshot.py`) - standalone versions of remix games that can be created from a single prompt without requiring a base game.
 
 > Note: an underscore `_` in the directory name indicates that the directory should be skipped. This is useful for game data that is not fully ready yet.
 
@@ -17,6 +18,8 @@ The format of each script is:
 - For remix scripts only: Two single-line comments at the top:
   - `# SOURCE: filename.py` - The base script that generated this remix
   - `# REMIX: brief description` - A minimal prompt describing the remix
+- For base/variant/oneshot scripts: One single-line comment at the top:
+  - `# CREATE: brief description` - A minimal prompt describing the game to create
 - A docstring that gives a brief description of the game and its mechanics from an implementation point of view.
 - A complete implementation of a single game, written in Python and using `pygame` as the only external dependence.
 
@@ -128,3 +131,18 @@ For each new file, add SOURCE and REMIX comments at the top:
 # SOURCE: existing_double_remix_file.py  
 # REMIX: brief description of the third modification being added
 ```
+
+### Oneshot Game Prompt
+
+Oneshot scripts are standalone versions of remix games that can be created from a single prompt without requiring a base game. They have a `# CREATE:` comment at the top and contain the complete game code.
+
+```
+Create a game: asteroids with rainbow colors where I can press enter to blast the asteroids near the ship
+
+[The LLM would generate the complete game code with appropriate CREATE comment and standalone docstring]
+```
+
+Oneshot scripts are useful for:
+- Training models to generate complete games from single prompts
+- Creating standalone game variants without dependency chains
+- Demonstrating specific game mechanics in isolation

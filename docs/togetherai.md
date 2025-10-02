@@ -1,3 +1,5 @@
+# Together.ai Fine-Tuning
+
 ## Fine-Tune the model
 
 1. Generate jsonl file: `python scripts/generate_dataset.py`
@@ -13,19 +15,29 @@
 1. Unzip the checkpoint.
     1. We'll refer to this directory as `/path/to/model`
 
+> Note: See Appendix: Training Runs for more settings choices
+
 ## Convert to GGUF for testing
 
+### Setup llama.cpp
+
 1. conda create -n playable python=3.12
+1. conda activate playable
 1. git clone https://github.com/ggerganov/llama.cpp.git
 1. pip install -r llama.cpp/requirements.txt
 1. pip install cmake
-1. python llama.cpp/convert_hf_to_gguf.py /path/to/model
-    1. We'll refer to this result as model-f16.gguf
 1. cd llama.cpp
 1. mkdir build
 1. cd build
 1. cmake .. -DLLAMA_CURL=OFF
 1. cmake --build . --config Release
+
+### Convert and Quantize
+
+1. conda activate playable
+1. cd llama.cpp/
+1. python convert_hf_to_gguf.py /path/to/model
+    1. We'll refer to this result as model-f16.gguf
 1. cd .\bin\Release\
 1. ./llama-quantize path/to/model-f16.gguf path/to/model-q4_k_m.gguf Q4_K_M
 
@@ -54,3 +66,63 @@
 1. $env:INFINITY_ARCADE_MODEL="user.Qwen2.5-7B-Instruct-iat-00-GGUF"
 1. infinity-arcade
 1. Your new model should load during startup!
+
+# Appendix: Training Runs
+
+## iat-00
+
+My first attempt. I used all the default together.ai fine-tuning settings.
+
+The resulting model was a little better than the amd/qwen2.5-7b-instruct-...-hybrid I had been using, but not a lot better.
+
+## iat-01
+
+Based on advice from ChatGPT I made the following modifications:
+1. Increased the number of base scripts, without remix edits, in the dataset by 5x.
+1. Added markdown python wrappers to all code samples.
+1. Applied the following fine-tuning settings:
+
+```
+Model:
+Qwen/Qwen2.5-7B-Instruct
+Training file:
+dataset_01.jsonl
+Suffix:
+iat-01
+Training type:
+LoRA
+LoRA rank:
+32
+LoRA alpha:
+64
+LoRA dropout:
+0
+LoRA trainable modules:
+all-linear
+Training method:
+SFT
+Train on inputs:
+false
+Epochs:
+5
+Checkpoints:
+1
+Evaluations:
+1
+Batch size:
+8
+Learning rate:
+0.0001
+Warmup ratio:
+0.03
+Max gradient norm:
+1
+Weight decay:
+0
+LR scheduler type:
+cosine
+Min LR ratio:
+0.05
+Scheduler cycles:
+1
+```

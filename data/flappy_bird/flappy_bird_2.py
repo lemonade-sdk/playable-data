@@ -1,3 +1,5 @@
+# CREATE: flappy bird
+
 """
 Flappy Bird - Navigate a bird through obstacles by controlling its flight.
 Press spacebar to make the bird flap its wings and rise. Gravity pulls it down constantly.
