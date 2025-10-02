@@ -9,6 +9,21 @@ pip install pygame
 python data/snake/snake.py
 ```
 
+## Stats
+
+```
+============================================================
+DATASET STATISTICS
+============================================================
+Game Type            Count           Lines of Code
+------------------------------------------------------------
+Base Games           30              5,848
+Remix Games          62              14,984
+------------------------------------------------------------
+TOTAL                92              20,832
+============================================================
+```
+
 ## Repo Structure
 
 All data is stored in the [data/](data) folder. See the [README.md](data/README.md) there for details about the data.

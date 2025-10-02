@@ -104,7 +104,8 @@ def route_script_to_formatter(script_path: Path):
         script_path: Path to the script file to process
 
     Returns:
-        Dict containing the formatted instruction data
+        Tuple of (formatted instruction data dict, game type string, line count)
+        where game_type is either "base" or "remix"
     """
     # Read the script content
     script_content = script_path.read_text(encoding="utf-8")
@@ -123,6 +124,9 @@ def route_script_to_formatter(script_path: Path):
 
         # Strip the first 3 lines (SOURCE comment, REMIX comment, and empty line)
         stripped_content = "\n".join(lines[3:])
+        line_count = len(
+            [line for line in stripped_content.splitlines() if line.strip()]
+        )
 
         # Find the base game file in the same directory
         base_game_path = script_path.parent / source_filename
@@ -133,11 +137,16 @@ def route_script_to_formatter(script_path: Path):
         # Read the base game content
         base_game_content = base_game_path.read_text(encoding="utf-8")
 
-        return format_remix_game(stripped_content, base_game_content, remix_prompt)
+        return (
+            format_remix_game(stripped_content, base_game_content, remix_prompt),
+            "remix",
+            line_count,
+        )
     else:
         # This is a create game
         create_prompt = script_path.stem.replace("_", " ")
-        return format_create_game(script_content, create_prompt)
+        line_count = len([line for line in lines if line.strip()])
+        return format_create_game(script_content, create_prompt), "base", line_count
 
 
 def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
@@ -164,6 +173,12 @@ def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
 
     dataset = []
 
+    # Statistics tracking
+    base_games_count = 0
+    remix_games_count = 0
+    base_games_lines = 0
+    remix_games_lines = 0
+
     # Iterate through all subdirectories in data/
     for game_dir in data_dir.iterdir():
         if game_dir.is_dir() and not game_dir.name.startswith("_"):
@@ -173,8 +188,18 @@ def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
             for script_file in game_dir.glob("*.py"):
                 try:
                     print(f"  Processing {script_file.name}...")
-                    formatted_data = route_script_to_formatter(script_file)
+                    formatted_data, game_type, line_count = route_script_to_formatter(
+                        script_file
+                    )
                     dataset.append(formatted_data)
+
+                    # Update statistics
+                    if game_type == "base":
+                        base_games_count += 1
+                        base_games_lines += line_count
+                    else:
+                        remix_games_count += 1
+                        remix_games_lines += line_count
                 except Exception as e:
                     print(f"  Error processing {script_file}: {e}")
                     continue
@@ -185,8 +210,21 @@ def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
             json.dump(entry, f, ensure_ascii=False)
             f.write("\n")
 
-    print(f"\nDataset generated with {len(dataset)} entries")
-    print(f"Output saved to: {output_file.absolute()}")
+    # Print statistics in a table
+    total_games = base_games_count + remix_games_count
+    total_lines = base_games_lines + remix_games_lines
+
+    print("\n" + "=" * 60)
+    print("DATASET STATISTICS")
+    print("=" * 60)
+    print(f"{'Game Type':<20} {'Count':<15} {'Lines of Code':<20}")
+    print("-" * 60)
+    print(f"{'Base Games':<20} {base_games_count:<15} {base_games_lines:<20,}")
+    print(f"{'Remix Games':<20} {remix_games_count:<15} {remix_games_lines:<20,}")
+    print("-" * 60)
+    print(f"{'TOTAL':<20} {total_games:<15} {total_lines:<20,}")
+    print("=" * 60)
+    print(f"\nOutput saved to: {output_file.absolute()}")
 
     return dataset
 
