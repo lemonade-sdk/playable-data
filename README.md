@@ -2,6 +2,8 @@
 
 A collection of high-quality retro-style pygame scripts useful for fine-tuning LLMs.
 
+The goal of this repo is to support fine-tuning models for use with [Infinity Arcade](https://github.com/lemonade-sdk/infinity-arcade), however the data and models are provided as open-source software other use as well (see [License](#license)).
+
 You can also play any game like this:
 
 ```
@@ -9,7 +11,29 @@ pip install pygame
 python data/snake/snake.py
 ```
 
-## Stats
+### Results
+
+`playable-data` has been used to train a few models on together.ai so far. Detailed instructions and notes are available [here](docs/togetherai.md).
+
+- All models will be uploaded at https://huggingface.co/playable.
+- Models are named `-iat-XX`, where iat stands for Infinity Arcade Test, and XX is the test number.
+- `Qwen2.5-7B-Instruct` is used as the base model because the intention is to eventually export for use on AMD NPUs, and Qwen2.5-7B-Instruct is one of the supported architectures for AMD NPUs.
+
+| Model | Description |
+|-------|-------------|
+| [iat-01](https://huggingface.co/playable/Qwen2.5-7B-Instruct-iat-01) | The first 7B model I've been able to code Space Invaders with, but it struggles with basic games like Snake and Pong that the base model can handle easily. |
+| [iat-02](https://huggingface.co/playable/Qwen2.5-7B-Instruct-iat-02) | Fixes Snake, but Pong is still broken. Breakout works! |
+| iat-03 | Still training. |
+
+### Dataset Stats
+
+The data, which is described in detail [here](data/README.md), is a collection of Python scripts that each implement a retro-style arcade game using only Python and the pygame library.
+
+Each script has some metadata at the top in comments for things like the intended vibe coding prompt.
+
+There are two types of games in the dataset right now:
+- Base Games: one-shot vibe coding of a game.
+- Remix Games: multi-shot vibe coding refinement of games.
 
 ```
 ============================================================
@@ -32,14 +56,14 @@ Run `python scripts/generate_dataset.py` to generate a `output\dataset.json` fil
 
 `docs/` folder contains guides (WIP) for running fine-tuning.
 
-## Results
+## Contributions
 
-This README will be updated over time with the results of fine-tuning experiments, links to models, etc.
+This repo is still under heavy development, so its not time for contributions yet. Advice and requests in the issues are much appreciated, though!
 
 ## License
 
-The goal of this repo is to support fine-tuning models for use with [Infinity Arcade](https://github.com/lemonade-sdk/infinity-arcade), however the dataset is publicly available for anyone to use under the [MIT license](LICENSE). Please note that the data was generated using Anthropic Claude models in Cursor, so the licenses of those products also apply to the data.
+This dataset is publicly available for anyone to use under the [MIT license](LICENSE). Please note that the data (pygame scripts) was generated using Anthropic Claude models in Cursor, so the licenses of those products also apply to the data.
 
 ## Maintainer
 
-This project is maintained by @jeremyfowers. It is sponsored by AMD.
+This project is maintained by @jeremyfowers.

@@ -131,18 +131,3 @@ For each new file, add SOURCE and REMIX comments at the top:
 # SOURCE: existing_double_remix_file.py  
 # REMIX: brief description of the third modification being added
 ```
-
-### Oneshot Game Prompt
-
-Oneshot scripts are standalone versions of remix games that can be created from a single prompt without requiring a base game. They have a `# CREATE:` comment at the top and contain the complete game code.
-
-```
-Create a game: asteroids with rainbow colors where I can press enter to blast the asteroids near the ship
-
-[The LLM would generate the complete game code with appropriate CREATE comment and standalone docstring]
-```
-
-Oneshot scripts are useful for:
-- Training models to generate complete games from single prompts
-- Creating standalone game variants without dependency chains
-- Demonstrating specific game mechanics in isolation

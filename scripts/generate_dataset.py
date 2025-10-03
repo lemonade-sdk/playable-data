@@ -1,6 +1,8 @@
 """
 This script takes the pygame scripts from the data directory and formats them
 into a JSONL file compatible with Together.ai fine-tuning.
+
+usage: `python generate_dataset.py`
 """
 
 import json
