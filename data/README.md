@@ -25,6 +25,8 @@ The format of each script is:
 
 ## Prompts
 
+The pygame scripts were generated using Claude Sonnet 4 and 4.5, in Cursor. Every script has been hand-tested to make sure it works correctly. This section provides the prompts that were used to generate the data.
+
 ### Base Game Prompt
 
 This prompt can be used to generate the a base game. Replace `snake` with any game name. This prompt assumes an empty file named `snake.py` in a folder named `snake`.
