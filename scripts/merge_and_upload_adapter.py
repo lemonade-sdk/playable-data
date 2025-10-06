@@ -3,6 +3,7 @@ This script downloads a Fireworks AI adapter, merges it with the base model,
 converts to GGUF format, and uploads to Hugging Face.
 
 setup:
+    Follow llamacpp setup instructions in docs/togetherai.md
     pip install --upgrade huggingface_hub transformers torch peft
     Download and sign in: https://storage.googleapis.com/fireworks-public/firectl/stable/firectl.exe
 

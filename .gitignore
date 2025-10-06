@@ -209,3 +209,6 @@ __marimo__/
 # Generated output files
 output/
 models/
+
+# Binaries
+scripts/firectl.exe
