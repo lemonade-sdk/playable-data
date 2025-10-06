@@ -23,6 +23,22 @@ from pathlib import Path
 import shutil
 
 
+def get_model_name(adapter_name, suffix=""):
+    """Generate standardized model name based on adapter name and optional suffix.
+
+    Args:
+        adapter_name: Name of the adapter
+        suffix: Optional suffix like 'f16', 'q4_k_m', 'GGUF', etc.
+
+    Returns:
+        Formatted model name string
+    """
+    base_name = f"Qwen2.5-Coder-7B-Instruct-{adapter_name}"
+    if suffix:
+        return f"{base_name}-{suffix}"
+    return base_name
+
+
 def run_command(cmd, description, cwd=None):
     """Run a shell command and handle errors."""
     print(f"\n{'='*60}")
@@ -136,7 +152,7 @@ def merge_adapter_with_base(
     return merged_path
 
 
-def convert_to_gguf(merged_model_path, output_dir):
+def convert_to_gguf(merged_model_path, output_dir, adapter_name):
     """Convert merged model to GGUF format."""
     # Path to llama.cpp (relative to workspace)
     script_dir = Path(__file__).parent
@@ -157,7 +173,7 @@ def convert_to_gguf(merged_model_path, output_dir):
         sys.exit(1)
 
     # Convert to GGUF F16 first
-    gguf_f16_path = output_dir / "model_f16.gguf"
+    gguf_f16_path = output_dir / f"{get_model_name(adapter_name, 'f16')}.gguf"
 
     run_command(
         [
@@ -187,7 +203,7 @@ def convert_to_gguf(merged_model_path, output_dir):
         print(f"Error: llama-quantize not found at {quantize_bin}")
         sys.exit(1)
 
-    gguf_q4km_path = output_dir / "model_q4_k_m.gguf"
+    gguf_q4km_path = output_dir / f"{get_model_name(adapter_name, 'q4_k_m')}.gguf"
 
     run_command(
         [str(quantize_bin), str(gguf_f16_path), str(gguf_q4km_path), "q4_k_m"],
@@ -201,7 +217,7 @@ def upload_to_huggingface(gguf_path, adapter_name):
     """Upload the GGUF model to Hugging Face."""
     from huggingface_hub import HfApi, create_repo
 
-    repo_name = f"Qwen2.5-Coder-7B-Instruct-{adapter_name}-GGUF"
+    repo_name = get_model_name(adapter_name, "GGUF")
     repo_id = f"playable/{repo_name}"
 
     print(f"\n{'='*60}")
@@ -313,7 +329,7 @@ def main():
     merged_model_path = merge_adapter_with_base(adapter_path, output_dir)
 
     # Step 3: Convert to GGUF and quantize
-    gguf_path = convert_to_gguf(merged_model_path, output_dir)
+    gguf_path = convert_to_gguf(merged_model_path, output_dir, args.adapter_name)
 
     # Step 4: Upload to Hugging Face
     upload_to_huggingface(gguf_path, args.adapter_name)
