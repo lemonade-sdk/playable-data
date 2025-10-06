@@ -58,3 +58,29 @@ TOTAL                154             35,867
 
 Training loss: 0.009
 Evaluation loss: 0.03
+
+### Results
+
+https://huggingface.co/playable/Qwen2.5-Coder-7B-Instruct-iat-03-GGUF
+
+- Pong works, and can be remixed for accelerating ball and 2D movement
+- Snake works, and remixing the food to move also works.
+    - "snake but the food moves", "snake with two players" works in 1 shot!
+- Flappy bird works, but remix doesnt
+- Asteroids doesnt really work
+- Space invaders worked, but my remix try didn't
+- Games actually show "press R to restart or Q to quit"
+- Breakout works
+- Frequent "unmatched )" error
+- Gaming fixing agent doesn't work well (not surprising since it isn't in the training set) 
+- The \`\`\`python fencing sometimes ends up in the game code. Parsing error in arcade, or is the fencing getting repeated?
+    -There's another fencing bug where some backticks are at the end of the game code.
+    - Let's just remove the fencing from the training data?
+
+
+
+### Next Steps
+
+1. Remove markdown code fencing from the training data
+1. Add game fixing to the training data
+1. Adjust the prompts so that the game script is the only output of the LLM
