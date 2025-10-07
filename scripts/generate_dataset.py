@@ -98,6 +98,40 @@ def format_remix_game(script_content: str, base_game_content: str, remix_prompt:
     }
 
 
+def format_bug_fix_game(bug_content: str, fixed_content: str, error_trace: str):
+    """
+    Format a bug/fix pair into instruct data.
+
+    Args:
+        bug_content: The content of the buggy script file (with CREATE and ERROR comments stripped)
+        fixed_content: The content of the fixed script file
+        error_trace: The error stack trace from the ERROR comments
+    """
+
+    bug_fix_instructions = """You are a Python expert debugging a pygame script that has an error. Generate ONLY the fixed Python code wrapped in a markdown code block using triple backticks (```python). Do not include any explanations outside the code block."""
+
+    bug_fix_input = f"""Error:
+{error_trace}
+
+Script with error:
+```python
+{bug_content}
+```
+
+Please fix the bug and provide the corrected code."""
+
+    # Format the output as a markdown code block
+    formatted_output = f"```python\n{fixed_content}\n```"
+
+    return {
+        "messages": [
+            {"role": "system", "content": bug_fix_instructions},
+            {"role": "user", "content": bug_fix_input},
+            {"role": "assistant", "content": formatted_output},
+        ]
+    }
+
+
 def route_script_to_formatter(script_path: Path):
     """
     Route a script file to the appropriate formatter based on its content.
@@ -107,8 +141,68 @@ def route_script_to_formatter(script_path: Path):
 
     Returns:
         Tuple of (formatted instruction data dict, game type string, line count)
-        where game_type is either "base" or "remix"
+        where game_type is either "base", "remix", or "bug_fix"
+        Returns None if this is a "_fixed.py" file (will be processed with its bug pair)
     """
+    # Skip _fixed.py files as they're processed with their bug counterparts
+    if script_path.stem.endswith("_fixed"):
+        return None
+    
+    # Check if this is a bug file
+    if script_path.stem.endswith("_bug"):
+        # Find the corresponding fixed file
+        fixed_filename = script_path.stem.replace("_bug", "_fixed") + ".py"
+        fixed_path = script_path.parent / fixed_filename
+        
+        if not fixed_path.exists():
+            raise FileNotFoundError(f"Fixed file not found: {fixed_path}")
+        
+        # Read both files
+        bug_content = script_path.read_text(encoding="utf-8")
+        fixed_content = fixed_path.read_text(encoding="utf-8")
+        
+        # Extract ERROR comments and strip them along with CREATE comment from bug file
+        bug_lines = bug_content.splitlines()
+        error_lines = []
+        start_index = 0
+        
+        for i, line in enumerate(bug_lines):
+            if line.startswith("# ERROR:"):
+                error_lines.append(line.replace("# ERROR: ", ""))
+            elif line.startswith("# CREATE:"):
+                continue
+            elif line.strip() == "":
+                # Skip empty lines after comments
+                if i < 10:  # Only skip early empty lines
+                    continue
+                else:
+                    start_index = i + 1
+                    break
+            else:
+                start_index = i
+                break
+        
+        error_trace = "\n".join(error_lines)
+        stripped_bug_content = "\n".join(bug_lines[start_index:])
+        
+        # Strip the CREATE comment from fixed file if present
+        fixed_lines = fixed_content.splitlines()
+        if len(fixed_lines) >= 1 and fixed_lines[0].startswith("# CREATE:"):
+            stripped_fixed_content = "\n".join(fixed_lines[2:])
+        else:
+            stripped_fixed_content = fixed_content
+        
+        # Count lines in the fixed version
+        line_count = len(
+            [line for line in stripped_fixed_content.splitlines() if line.strip()]
+        )
+        
+        return (
+            format_bug_fix_game(stripped_bug_content, stripped_fixed_content, error_trace),
+            "bug_fix",
+            line_count,
+        )
+    
     # Read the script content
     script_content = script_path.read_text(encoding="utf-8")
 
@@ -189,33 +283,63 @@ def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
     # Statistics tracking
     base_games_count = 0
     remix_games_count = 0
+    bug_fix_count = 0
     base_games_lines = 0
     remix_games_lines = 0
+    bug_fix_lines = 0
 
     # Iterate through all subdirectories in data/
     for game_dir in data_dir.iterdir():
         if game_dir.is_dir() and not game_dir.name.startswith("_"):
             print(f"Processing {game_dir.name}...")
 
-            # Find all .py files in this game directory
+            # Find all .py files in this game directory (base and remix games)
             for script_file in game_dir.glob("*.py"):
                 try:
                     print(f"  Processing {script_file.name}...")
-                    formatted_data, game_type, line_count = route_script_to_formatter(
-                        script_file
-                    )
+                    result = route_script_to_formatter(script_file)
+                    
+                    # Skip if None (shouldn't happen in parent dir)
+                    if result is None:
+                        continue
+                    
+                    formatted_data, game_type, line_count = result
                     dataset.append(formatted_data)
 
-                    # Update statistics
+                    # Update statistics (only base/remix in parent dir)
                     if game_type == "base":
                         base_games_count += 1
                         base_games_lines += line_count
-                    else:
+                    elif game_type == "remix":
                         remix_games_count += 1
                         remix_games_lines += line_count
                 except Exception as e:
                     print(f"  Error processing {script_file}: {e}")
                     continue
+            
+            # Also check for a bugs subdirectory (only bug/fix pairs here)
+            bugs_dir = game_dir / "bugs"
+            if bugs_dir.exists() and bugs_dir.is_dir():
+                print(f"  Processing bugs subdirectory...")
+                for script_file in bugs_dir.glob("*.py"):
+                    try:
+                        print(f"    Processing {script_file.name}...")
+                        result = route_script_to_formatter(script_file)
+                        
+                        # Skip if None (e.g., _fixed.py files)
+                        if result is None:
+                            print(f"    Skipping {script_file.name} (processed with bug pair)")
+                            continue
+                        
+                        formatted_data, game_type, line_count = result
+                        dataset.append(formatted_data)
+
+                        # Update statistics (only bug_fix in bugs dir)
+                        bug_fix_count += 1
+                        bug_fix_lines += line_count
+                    except Exception as e:
+                        print(f"    Error processing {script_file}: {e}")
+                        continue
 
     # Write the dataset to JSONL file (one JSON object per line)
     with open(output_file, "w", encoding="utf-8") as f:
@@ -224,8 +348,8 @@ def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
             f.write("\n")
 
     # Print statistics in a table
-    total_games = base_games_count + remix_games_count
-    total_lines = base_games_lines + remix_games_lines
+    total_games = base_games_count + remix_games_count + bug_fix_count
+    total_lines = base_games_lines + remix_games_lines + bug_fix_lines
 
     print("\n" + "=" * 60)
     print("DATASET STATISTICS")
@@ -234,6 +358,7 @@ def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
     print("-" * 60)
     print(f"{'Base Games':<20} {base_games_count:<15} {base_games_lines:<20,}")
     print(f"{'Remix Games':<20} {remix_games_count:<15} {remix_games_lines:<20,}")
+    print(f"{'Bug Fix Games':<20} {bug_fix_count:<15} {bug_fix_lines:<20,}")
     print("-" * 60)
     print(f"{'TOTAL':<20} {total_games:<15} {total_lines:<20,}")
     print("=" * 60)

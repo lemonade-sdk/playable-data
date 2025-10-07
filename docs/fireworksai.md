@@ -81,6 +81,6 @@ https://huggingface.co/playable/Qwen2.5-Coder-7B-Instruct-iat-03-GGUF
 
 ### Next Steps
 
-1. Remove markdown code fencing from the training data
+1. Remove markdown code fencing from the training data OR set temperature=0.3 and top_p=0.9 in the app
 1. Add game fixing to the training data
 1. Adjust the prompts so that the game script is the only output of the LLM

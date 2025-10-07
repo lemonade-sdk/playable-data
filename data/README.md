@@ -10,6 +10,7 @@ These folders contain:
 - A few remix scripts, which use the base script as a starting point and then make some modification to the game.
 - A few remixes-of-remixes.
 - Oneshot scripts (ending in `_oneshot.py`) - standalone versions of remix games that can be created from a single prompt without requiring a base game.
+- A `bugs` subdirectory containing bug/fix pairs for debugging practice - each pair consists of a `*_bug.py` file with a minor bug and a `*_fixed.py` file with the corrected code and explanation.
 
 > Note: an underscore `_` in the directory name indicates that the directory should be skipped. This is useful for game data that is not fully ready yet.
 
@@ -20,6 +21,9 @@ The format of each script is:
   - `# REMIX: brief description` - A minimal prompt describing the remix
 - For base/variant/oneshot scripts: One single-line comment at the top:
   - `# CREATE: brief description` - A minimal prompt describing the game to create
+- For bug/fix pairs in the `bugs` subdirectory:
+  - `*_bug.py`: Contains a minor, common Python bug (e.g., uninitialized variable, missing parenthesis, etc.)
+  - `*_fixed.py`: Contains the corrected code with a docstring explaining where and how to fix the bug
 - A docstring that gives a brief description of the game and its mechanics from an implementation point of view.
 - A complete implementation of a single game, written in Python and using `pygame` as the only external dependence.
 
@@ -132,4 +136,63 @@ great! along the lines of the last exercise, make 4 files that contian 3 remix i
 For each new file, add SOURCE and REMIX comments at the top:
 # SOURCE: existing_double_remix_file.py  
 # REMIX: brief description of the third modification being added
+```
+
+### Bug/Fix Pair Prompt
+
+This prompt creates a pair of files for debugging practice. The `*_bug.py` file contains a minor bug that causes a crash, and the `*_fixed.py` file contains the corrected code with an explanation.
+
+```
+You are going to create some debugging examples to help students understand how to fix common python errors.
+
+Create a folder under data/asteroids/ called "bugs"
+
+In that folder, create a pair of files asteroids_bug.py and asteroids_fix.py
+
+The _bug.py should be identical to asteroids/asteroids.py, except that it has one minor bug.
+
+Important requirements:
+- The bug MUST cause the script to immediately exit with a stack trace (not a logic error, not something that requires playing for a while to rigger)
+- DO NOT add any comments identifying the bug in the code - it should look like naturally written code someone would have made in earnest
+- DO NOT use spelling errors like typos - use semantically similar but incorrect names (e.g., 'score' instead of 'current_score')
+- After creating the bug file, RUN IT to capture the actual error stack trace
+- Add the stack trace as `# ERROR:` comments at the top of the file, after the `# CREATE:` line
+
+Examples of minor bugs that cause crashes:
+- UnboundLocalError: variable referenced before assignment (forgot to initialize a variable)
+- SyntaxError: unmatched parenthesis
+- AttributeError: using wrong attribute name (e.g., asteroid.size instead of asteroid.radius)
+- TypeError: type mismatch (e.g., concatenating string with int)
+
+The _fixed.py should be like the base script, except:
+- the docstring should include a 1-2 sentence explanation of where in the code to fix the bug, without being overly specific about line numbers
+- the bug is fixed
+- add a comment at the fix location noting it's been fixed
+
+Example of bug file format:
+```python
+# CREATE: asteroids
+# ERROR: Traceback (most recent call last):
+# ERROR:   File "C:\...\asteroids_bug.py", line 300, in <module>
+# ERROR:     main()
+# ERROR:   File "C:\...\asteroids_bug.py", line 226, in main
+# ERROR:     bullets = [bullet for bullet in bullets if bullet.update()]
+# ERROR: UnboundLocalError: cannot access local variable 'bullets' where it is not associated with a value
+
+"""
+Asteroids Game
+...
+"""
+```
+
+Start by using `cp` to create the _bug.py and _fix.py files as identical copies of the original. Then, run introduce the bug into _bug.py. Next, run _bug.py to get the stack trace and add that to the top of the file. Finally, update the _fix.py docstring with the fix description. 
+```
+
+To create a few more:
+
+```
+Great, now do this for game_1.py through game_4.py. Make sure there is good variety, in that all bugs are distinct in terms of their error type and the subject of the bug (scoring, drawing, collisions, etc.). Do NOT make them all about the same subject (e.g., 2 or more about scoring).
+
+
+Don't forget to use cp to initialize the files.
 ```
