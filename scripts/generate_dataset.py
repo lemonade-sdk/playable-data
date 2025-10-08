@@ -140,10 +140,10 @@ def route_script_to_formatter(script_path: Path):
     Returns:
         Tuple of (formatted instruction data dict, game type string, line count)
         where game_type is either "base", "remix", or "bug_fix"
-        Returns None if this is a "_fixed.py" file (will be processed with its bug pair)
+        Returns None if this is a "_fix.py" file (will be processed with its bug pair)
     """
-    # Skip _fixed.py files as they're processed with their bug counterparts
-    if script_path.stem.endswith("_fixed"):
+    # Skip _fix.py files as they're processed with their bug counterparts
+    if script_path.stem.endswith("_fix"):
         return None
     
     # Check if this is a bug file
@@ -324,7 +324,7 @@ def generate_dataset_json(data_dir: Path = None, output_file: Path = None):
                         print(f"    Processing {script_file.name}...")
                         result = route_script_to_formatter(script_file)
                         
-                        # Skip if None (e.g., _fixed.py files)
+                        # Skip if None (e.g., _fix.py files)
                         if result is None:
                             print(f"    Skipping {script_file.name} (processed with bug pair)")
                             continue

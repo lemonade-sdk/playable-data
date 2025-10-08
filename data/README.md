@@ -10,7 +10,7 @@ These folders contain:
 - A few remix scripts, which use the base script as a starting point and then make some modification to the game.
 - A few remixes-of-remixes.
 - Oneshot scripts (ending in `_oneshot.py`) - standalone versions of remix games that can be created from a single prompt without requiring a base game.
-- A `bugs` subdirectory containing bug/fix pairs for debugging practice - each pair consists of a `*_bug.py` file with a minor bug and a `*_fixed.py` file with the corrected code and explanation.
+- A `bugs` subdirectory containing bug/fix pairs for debugging practice - each pair consists of a `*_bug.py` file with a minor bug and a `*_fix.py` file with the corrected code and explanation.
 
 > Note: an underscore `_` in the directory name indicates that the directory should be skipped. This is useful for game data that is not fully ready yet.
 
@@ -23,7 +23,7 @@ The format of each script is:
   - `# CREATE: brief description` - A minimal prompt describing the game to create
 - For bug/fix pairs in the `bugs` subdirectory:
   - `*_bug.py`: Contains a minor, common Python bug (e.g., uninitialized variable, missing parenthesis, etc.)
-  - `*_fixed.py`: Contains the corrected code with a docstring explaining where and how to fix the bug
+  - `*_fix.py`: Contains the corrected code with a docstring explaining where and how to fix the bug
 - A docstring that gives a brief description of the game and its mechanics from an implementation point of view.
 - A complete implementation of a single game, written in Python and using `pygame` as the only external dependence.
 
@@ -174,7 +174,7 @@ Examples of minor bugs that cause crashes:
 - AttributeError: using wrong attribute name (e.g., asteroid.size instead of asteroid.radius)
 - TypeError: type mismatch (e.g., concatenating string with int)
 
-The _fixed.py should be like the base script, except:
+The _fix.py should be like the base script, except:
 - the docstring should include a 1-2 sentence explanation of where in the code to fix the bug, without being overly specific about line numbers
 - the bug is fixed
 - add a comment at the fix location noting it's been fixed
