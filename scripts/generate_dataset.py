@@ -72,9 +72,7 @@ def format_remix_game(script_content: str, base_game_content: str, remix_prompt:
     6. Make sure the game window closes properly when the user clicks the X button
     7. Use reasonable colors and make the game visually appealing with pygame primitives
 
-    Output format:
-        First, a one-sentence explanation of the modification in the context of the game, starting with a phrase like "I will modify the game to...".
-        Then, generate ONLY the complete modified Python code wrapped in a markdown code block using triple backticks (```python)."""
+    Generate ONLY the complete modified Python code wrapped in a markdown code block using triple backticks (```python)."""
 
     remix_input = f"""Here is the existing game code:
 
@@ -151,7 +149,7 @@ def route_script_to_formatter(script_path: Path):
     # Check if this is a bug file
     if script_path.stem.endswith("_bug"):
         # Find the corresponding fixed file
-        fixed_filename = script_path.stem.replace("_bug", "_fixed") + ".py"
+        fixed_filename = script_path.stem.replace("_bug", "_fix") + ".py"
         fixed_path = script_path.parent / fixed_filename
         
         if not fixed_path.exists():

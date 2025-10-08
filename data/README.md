@@ -138,6 +138,16 @@ For each new file, add SOURCE and REMIX comments at the top:
 # REMIX: brief description of the third modification being added
 ```
 
+### Oneshot Prompt
+
+```
+great! now, for each of the remix files in the galaga folder, create a base game version of that file.
+
+it should have the CREATE comment instead of SOURCE/REMIX and the docstring should reflect the fact that this file was created in one shot, not as a series of modifications of a base file.
+
+use cp to copy the remix files and then just modify the docstrings. there's no need to regenerate each whole file.
+```
+
 ### Bug/Fix Pair Prompt
 
 This prompt creates a pair of files for debugging practice. The `*_bug.py` file contains a minor bug that causes a crash, and the `*_fixed.py` file contains the corrected code with an explanation.
