@@ -170,3 +170,81 @@ Evaluation loss: 0.02
 2. Remove BUG_FIX examples from pong. Pong rarely has bugs anyways.
     - Or, remove Pong from the dataset entirely? The base model can do pong just fine.
 3. Figure out something to do about asteroids.
+
+
+## iat-05
+
+This model:
+1. Fixes a bug in generating bug/fix examples
+2. Adds Galaga to the training set
+3. Adjusts the remix prompt to better reflect the examples
+
+### LORA Settings
+
+```
+Output Model
+iat-05
+
+Base Model
+qwen2p5-coder-7b-instruct
+
+Type
+Conversation
+State
+Validating
+Created On
+Wednesday, October 8, 2025
+Status
+Code
+OK
+Configuration
+Dataset
+dataset-05-jsonl
+
+Evaluation Dataset
+Auto-carve-out
+Epochs
+5
+LoRA Rank
+32
+Learning Rate
+0.0005
+Max Context Length
+8192
+Turbo Mode
+Off
+```
+
+Dataset:
+
+```
+============================================================
+DATASET STATISTICS
+============================================================
+Game Type            Count           Lines of Code
+------------------------------------------------------------
+Base Games           111             26,384
+Remix Games          76              19,165
+Bug Fix Games        35              7,260
+------------------------------------------------------------
+TOTAL                222             52,809
+============================================================
+```
+
+### Validation
+
+### Results
+
+- Asteroids and galaga are tantilizingly close, but dont work
+- Pong works! So does the 2d remix.
+- Snake and remixes work. 2 player, moving food.
+- Flappy bird and remixes work. Oneshotting "flappy bird with rainbow colored coins i can eat" works!
+- Breakout works. Extra lives remix works. Powerups remix doesn't work.
+- Space invaders, rainbox colors works.
+    - "space invaders with exploding bullets and 2d movement" works!
+    - "space invaders with a starfield in the background" works! (even though this isnt directly in the training set)
+        - "give the invaders rainbow colors" remix on this works!
+
+### Next Steps
+
+1. Figure out what to do about asteroids and galaga...
