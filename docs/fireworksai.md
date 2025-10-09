@@ -248,3 +248,13 @@ TOTAL                222             52,809
 ### Next Steps
 
 1. Figure out what to do about asteroids and galaga...
+
+## iat-05-1
+
+Same as iat-05, except that the learning rate is changed from 0.0005 to 0.0001.
+
+### Results
+
+- Galaga works!
+- Asteroids is closer to working now.
+- Everything from iat-05 still works.

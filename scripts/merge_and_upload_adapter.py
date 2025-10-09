@@ -8,10 +8,18 @@ setup:
     Download and sign in: https://storage.googleapis.com/fireworks-public/firectl/stable/firectl.exe
 
 Usage:
-    python merge_and_upload_adapter.py <adapter_name> <output_directory>
+    python merge_and_upload_adapter.py <adapter_name> <output_directory> [--production PRODUCTION_NAME]
 
-Example:
+Examples:
+    # Standard usage with auto-generated names
     python merge_and_upload_adapter.py my-lora-adapter ./models
+
+    # Production usage with custom names
+    python merge_and_upload_adapter.py my-lora-adapter ./models --production Playable1
+    
+    This creates:
+    - GGUF repo: playable/Playable1-GGUF with file Playable1-q4_k_m.gguf
+    - SafeTensors repo: playable/Playable1 with files Playable1-00001-of-00004.safetensors, etc.
 """
 
 # cspell: disable
@@ -20,7 +28,6 @@ import argparse
 import subprocess
 import sys
 from pathlib import Path
-import shutil
 
 
 def get_model_name(adapter_name, suffix=""):
@@ -152,7 +159,7 @@ def merge_adapter_with_base(
     return merged_path
 
 
-def convert_to_gguf(merged_model_path, output_dir, adapter_name):
+def convert_to_gguf(merged_model_path, output_dir, adapter_name, production_name=None):
     """Convert merged model to GGUF format."""
     # Path to llama.cpp (relative to workspace)
     script_dir = Path(__file__).parent
@@ -173,7 +180,10 @@ def convert_to_gguf(merged_model_path, output_dir, adapter_name):
         sys.exit(1)
 
     # Convert to GGUF F16 first
-    gguf_f16_path = output_dir / f"{get_model_name(adapter_name, 'f16')}.gguf"
+    if production_name:
+        gguf_f16_path = output_dir / f"{production_name}-f16.gguf"
+    else:
+        gguf_f16_path = output_dir / f"{get_model_name(adapter_name, 'f16')}.gguf"
 
     run_command(
         [
@@ -203,7 +213,10 @@ def convert_to_gguf(merged_model_path, output_dir, adapter_name):
         print(f"Error: llama-quantize not found at {quantize_bin}")
         sys.exit(1)
 
-    gguf_q4km_path = output_dir / f"{get_model_name(adapter_name, 'q4_k_m')}.gguf"
+    if production_name:
+        gguf_q4km_path = output_dir / f"{production_name}-q4_k_m.gguf"
+    else:
+        gguf_q4km_path = output_dir / f"{get_model_name(adapter_name, 'q4_k_m')}.gguf"
 
     run_command(
         [str(quantize_bin), str(gguf_f16_path), str(gguf_q4km_path), "q4_k_m"],
@@ -213,11 +226,17 @@ def convert_to_gguf(merged_model_path, output_dir, adapter_name):
     return gguf_q4km_path
 
 
-def upload_to_huggingface(gguf_path, adapter_name):
+def upload_to_huggingface(gguf_path, adapter_name, merged_model_path=None, production_name=None):
     """Upload the GGUF model to Hugging Face."""
     from huggingface_hub import HfApi, create_repo
+    import re
 
-    repo_name = get_model_name(adapter_name, "GGUF")
+    # Determine repo name based on production_name
+    if production_name:
+        repo_name = f"{production_name}-GGUF"
+    else:
+        repo_name = get_model_name(adapter_name, "GGUF")
+    
     repo_id = f"playable/{repo_name}"
 
     print(f"\n{'='*60}")
@@ -299,6 +318,142 @@ This model can be used with llama.cpp or any compatible inference engine that su
     print(f"Model available at: https://huggingface.co/{repo_id}")
     print(f"{'='*60}")
 
+    # If production_name is set, also upload safetensors to a separate repo
+    if production_name and merged_model_path:
+        upload_safetensors_to_huggingface(merged_model_path, production_name, adapter_name, api)
+
+
+def upload_safetensors_to_huggingface(merged_model_path, production_name, adapter_name, api):
+    """Upload safetensors to a separate Hugging Face repository."""
+    from huggingface_hub import create_repo
+
+    repo_id = f"playable/{production_name}"
+
+    print(f"\n{'='*60}")
+    print(f"Creating/uploading safetensors to Hugging Face repository: {repo_id}")
+    print(f"{'='*60}")
+
+    # Create repo if it doesn't exist
+    try:
+        create_repo(repo_id, exist_ok=True, repo_type="model")
+        print(f"Repository created/verified: {repo_id}")
+    except Exception as e:
+        print(f"Error creating repository: {e}")
+        sys.exit(1)
+
+    # Find all safetensors files in the merged model directory
+    merged_path = Path(merged_model_path)
+    safetensors_files = list(merged_path.glob("*.safetensors"))
+    
+    if not safetensors_files:
+        print(f"Warning: No safetensors files found in {merged_path}")
+        return
+
+    # Rename and upload safetensors files
+    import re
+    for safetensor_file in safetensors_files:
+        # Match pattern like "model-00001-of-00004.safetensors"
+        match = re.match(r'model-(\d+-of-\d+)\.safetensors', safetensor_file.name)
+        if match:
+            new_name = f"{production_name}-{match.group(1)}.safetensors"
+        else:
+            # Handle single file case: "model.safetensors"
+            if safetensor_file.name == "model.safetensors":
+                new_name = f"{production_name}.safetensors"
+            else:
+                new_name = safetensor_file.name
+        
+        try:
+            api.upload_file(
+                path_or_fileobj=str(safetensor_file),
+                path_in_repo=new_name,
+                repo_id=repo_id,
+                repo_type="model",
+            )
+            print(f"Successfully uploaded {new_name} to {repo_id}")
+        except Exception as e:
+            print(f"Error uploading {safetensor_file.name}: {e}")
+            sys.exit(1)
+
+    # Upload other necessary files (config.json, tokenizer files, etc.)
+    other_files = [
+        "config.json",
+        "generation_config.json",
+        "tokenizer.json",
+        "tokenizer_config.json",
+        "merges.txt",
+        "vocab.json",
+        "special_tokens_map.json",
+    ]
+    
+    for filename in other_files:
+        file_path = merged_path / filename
+        if file_path.exists():
+            try:
+                api.upload_file(
+                    path_or_fileobj=str(file_path),
+                    path_in_repo=filename,
+                    repo_id=repo_id,
+                    repo_type="model",
+                )
+                print(f"Successfully uploaded {filename} to {repo_id}")
+            except Exception as e:
+                print(f"Warning: Error uploading {filename}: {e}")
+
+    # Create and upload README for safetensors repo
+    readme_content = f"""---
+license: apache-2.0
+base_model: Qwen/Qwen2.5-Coder-7B-Instruct
+tags:
+- safetensors
+- text-generation
+---
+
+# {production_name}
+
+This is a fine-tuned version of Qwen/Qwen2.5-Coder-7B-Instruct using the '{adapter_name}' adapter.
+
+## Model Details
+
+- **Base Model:** Qwen/Qwen2.5-Coder-7B-Instruct
+- **Adapter:** {adapter_name}
+- **Format:** SafeTensors
+
+## Usage
+
+This model can be used with transformers library:
+
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model = AutoModelForCausalLM.from_pretrained("playable/{production_name}")
+tokenizer = AutoTokenizer.from_pretrained("playable/{production_name}")
+
+inputs = tokenizer("Your prompt here", return_tensors="pt")
+outputs = model.generate(**inputs)
+print(tokenizer.decode(outputs[0]))
+```
+"""
+
+    readme_path = merged_path / "README_safetensors.md"
+    readme_path.write_text(readme_content)
+
+    try:
+        api.upload_file(
+            path_or_fileobj=str(readme_path),
+            path_in_repo="README.md",
+            repo_id=repo_id,
+            repo_type="model",
+        )
+        print(f"Successfully uploaded README.md to {repo_id}")
+    except Exception as e:
+        print(f"Error uploading README: {e}")
+
+    print(f"\n{'='*60}")
+    print(f"✓ SafeTensors upload complete!")
+    print(f"Model available at: https://huggingface.co/{repo_id}")
+    print(f"{'='*60}")
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -307,6 +462,11 @@ def main():
     parser.add_argument("adapter_name", help="Name of the adapter on Fireworks AI")
     parser.add_argument(
         "output_directory", help="Directory to store intermediate files and output"
+    )
+    parser.add_argument(
+        "--production",
+        dest="production_name",
+        help="Production model name. When set, creates simplified naming: PRODUCTION_NAME-GGUF repo with PRODUCTION_NAME-q4_k_m.gguf file, and PRODUCTION_NAME repo with safetensors files.",
     )
 
     args = parser.parse_args()
@@ -320,6 +480,8 @@ def main():
     print(f"{'='*60}")
     print(f"Adapter Name: {args.adapter_name}")
     print(f"Output Directory: {output_dir.absolute()}")
+    if args.production_name:
+        print(f"Production Name: {args.production_name}")
     print(f"{'='*60}")
 
     # Step 1: Download adapter
@@ -329,15 +491,18 @@ def main():
     merged_model_path = merge_adapter_with_base(adapter_path, output_dir)
 
     # Step 3: Convert to GGUF and quantize
-    gguf_path = convert_to_gguf(merged_model_path, output_dir, args.adapter_name)
+    gguf_path = convert_to_gguf(merged_model_path, output_dir, args.adapter_name, args.production_name)
 
     # Step 4: Upload to Hugging Face
-    upload_to_huggingface(gguf_path, args.adapter_name)
+    upload_to_huggingface(gguf_path, args.adapter_name, merged_model_path, args.production_name)
 
     print(f"\n{'='*60}")
     print(f"✓ ALL STEPS COMPLETED SUCCESSFULLY!")
     print(f"{'='*60}")
     print(f"Final GGUF model: {gguf_path}")
+    if args.production_name:
+        print(f"GGUF repo: playable/{args.production_name}-GGUF")
+        print(f"SafeTensors repo: playable/{args.production_name}")
     print(f"{'='*60}")
 
 

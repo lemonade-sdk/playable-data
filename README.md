@@ -23,7 +23,7 @@ python data/snake/snake.py
 |-------|-------------|
 | [iat-01](https://huggingface.co/playable/Qwen2.5-7B-Instruct-iat-01) | The first 7B model I've been able to code Space Invaders with, but it struggles with basic games like Snake and Pong that the base model can handle easily. |
 | [iat-02](https://huggingface.co/playable/Qwen2.5-7B-Instruct-iat-02) | Fixes Snake, but Pong is still broken. Breakout works! |
-| iat-03 | Still training. |
+| iat-05-01 | Released as https://huggingface.co/playable/Playable1-GGUF ! |
 
 ### Dataset Stats
 
