@@ -17,13 +17,16 @@ python data/snake/snake.py
 
 - All models will be uploaded at https://huggingface.co/playable.
 - Models are named `-iat-XX`, where iat stands for Infinity Arcade Test, and XX is the test number.
-- `Qwen2.5-7B-Instruct` is used as the base model because the intention is to eventually export for use on AMD NPUs, and Qwen2.5-7B-Instruct is one of the supported architectures for AMD NPUs.
+- `Qwen2.5-7B-Instruct` (or `Qwen2.5-Coder-7B-Instruct`) is used as the base model because the intention is to eventually export for use on AMD NPUs, and Qwen2.5-7B-Instruct is one of the supported architectures for AMD NPUs.
 
 | Model | Description |
 |-------|-------------|
 | [iat-01](https://huggingface.co/playable/Qwen2.5-7B-Instruct-iat-01) | The first 7B model I've been able to code Space Invaders with, but it struggles with basic games like Snake and Pong that the base model can handle easily. |
 | [iat-02](https://huggingface.co/playable/Qwen2.5-7B-Instruct-iat-02) | Fixes Snake, but Pong is still broken. Breakout works! |
-| iat-05-01 | Released as https://huggingface.co/playable/Playable1-GGUF ! |
+| [iat-03](https://huggingface.co/playable/Qwen2.5-Coder-7B-Instruct-iat-03-GGUF) | Switched to Qwen2.5-Coder as the base model and got Breakout and more remixes to work, but rough edges remain |
+| [iat-04](https://huggingface.co/playable/Qwen2.5-Coder-7B-Instruct-iat-04-GGUF) | Added debugging examples to the dataset. Space Invaders now works! |
+| [iat-05](https://huggingface.co/playable/Qwen2.5-Coder-7B-Instruct-iat-04-GGUF) | Added Galaga examples to the dataset and fixed prompt bugs. Galaga doesn't work though. |
+| iat-05-01 | Changed training parameters. Galaga works! Released as https://huggingface.co/playable/Playable1-GGUF ! |
 
 ### Dataset Stats
 
