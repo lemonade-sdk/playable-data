@@ -26,7 +26,7 @@ python data/snake/snake.py
 | [iat-03](https://huggingface.co/playable/Qwen2.5-Coder-7B-Instruct-iat-03-GGUF) | Switched to Qwen2.5-Coder as the base model and got Breakout and more remixes to work, but rough edges remain |
 | [iat-04](https://huggingface.co/playable/Qwen2.5-Coder-7B-Instruct-iat-04-GGUF) | Added debugging examples to the dataset. Space Invaders now works! |
 | [iat-05](https://huggingface.co/playable/Qwen2.5-Coder-7B-Instruct-iat-04-GGUF) | Added Galaga examples to the dataset and fixed prompt bugs. Galaga doesn't work though. |
-| iat-05-01 | Changed training parameters. Galaga works! Released as https://huggingface.co/playable/Playable1-GGUF ! |
+| iat-05-01 | Changed training parameters. Galaga works! Released as https://huggingface.co/playable/Playable1-GGUF ! Trained on https://huggingface.co/datasets/playable/playable-05 |
 
 ### Dataset Stats
 
