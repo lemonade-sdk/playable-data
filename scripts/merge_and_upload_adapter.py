@@ -16,10 +16,10 @@ Examples:
 
     # Production usage with custom names
     python merge_and_upload_adapter.py my-lora-adapter ./models --production Playable1
-    
+
     This creates:
     - GGUF repo: playable/Playable1-GGUF with file Playable1-q4_k_m.gguf
-    - SafeTensors repo: playable/Playable1 with files Playable1-00001-of-00004.safetensors, etc.
+    - SafeTensors repo: playable/Playable1 with files model-00001-of-00004.safetensors, etc.
 """
 
 # cspell: disable
@@ -226,7 +226,9 @@ def convert_to_gguf(merged_model_path, output_dir, adapter_name, production_name
     return gguf_q4km_path
 
 
-def upload_to_huggingface(gguf_path, adapter_name, merged_model_path=None, production_name=None):
+def upload_to_huggingface(
+    gguf_path, adapter_name, merged_model_path=None, production_name=None
+):
     """Upload the GGUF model to Hugging Face."""
     from huggingface_hub import HfApi, create_repo
     import re
@@ -236,7 +238,7 @@ def upload_to_huggingface(gguf_path, adapter_name, merged_model_path=None, produ
         repo_name = f"{production_name}-GGUF"
     else:
         repo_name = get_model_name(adapter_name, "GGUF")
-    
+
     repo_id = f"playable/{repo_name}"
 
     print(f"\n{'='*60}")
@@ -320,10 +322,14 @@ This model can be used with llama.cpp or any compatible inference engine that su
 
     # If production_name is set, also upload safetensors to a separate repo
     if production_name and merged_model_path:
-        upload_safetensors_to_huggingface(merged_model_path, production_name, adapter_name, api)
+        upload_safetensors_to_huggingface(
+            merged_model_path, production_name, adapter_name, api
+        )
 
 
-def upload_safetensors_to_huggingface(merged_model_path, production_name, adapter_name, api):
+def upload_safetensors_to_huggingface(
+    merged_model_path, production_name, adapter_name, api
+):
     """Upload safetensors to a separate Hugging Face repository."""
     from huggingface_hub import create_repo
 
@@ -344,33 +350,21 @@ def upload_safetensors_to_huggingface(merged_model_path, production_name, adapte
     # Find all safetensors files in the merged model directory
     merged_path = Path(merged_model_path)
     safetensors_files = list(merged_path.glob("*.safetensors"))
-    
+
     if not safetensors_files:
         print(f"Warning: No safetensors files found in {merged_path}")
         return
 
-    # Rename and upload safetensors files
-    import re
+    # Upload safetensors files with original names
     for safetensor_file in safetensors_files:
-        # Match pattern like "model-00001-of-00004.safetensors"
-        match = re.match(r'model-(\d+-of-\d+)\.safetensors', safetensor_file.name)
-        if match:
-            new_name = f"{production_name}-{match.group(1)}.safetensors"
-        else:
-            # Handle single file case: "model.safetensors"
-            if safetensor_file.name == "model.safetensors":
-                new_name = f"{production_name}.safetensors"
-            else:
-                new_name = safetensor_file.name
-        
         try:
             api.upload_file(
                 path_or_fileobj=str(safetensor_file),
-                path_in_repo=new_name,
+                path_in_repo=safetensor_file.name,
                 repo_id=repo_id,
                 repo_type="model",
             )
-            print(f"Successfully uploaded {new_name} to {repo_id}")
+            print(f"Successfully uploaded {safetensor_file.name} to {repo_id}")
         except Exception as e:
             print(f"Error uploading {safetensor_file.name}: {e}")
             sys.exit(1)
@@ -384,8 +378,9 @@ def upload_safetensors_to_huggingface(merged_model_path, production_name, adapte
         "merges.txt",
         "vocab.json",
         "special_tokens_map.json",
+        "model.safetensors.index.json",
     ]
-    
+
     for filename in other_files:
         file_path = merged_path / filename
         if file_path.exists():
@@ -491,10 +486,14 @@ def main():
     merged_model_path = merge_adapter_with_base(adapter_path, output_dir)
 
     # Step 3: Convert to GGUF and quantize
-    gguf_path = convert_to_gguf(merged_model_path, output_dir, args.adapter_name, args.production_name)
+    gguf_path = convert_to_gguf(
+        merged_model_path, output_dir, args.adapter_name, args.production_name
+    )
 
     # Step 4: Upload to Hugging Face
-    upload_to_huggingface(gguf_path, args.adapter_name, merged_model_path, args.production_name)
+    upload_to_huggingface(
+        gguf_path, args.adapter_name, merged_model_path, args.production_name
+    )
 
     print(f"\n{'='*60}")
     print(f"✓ ALL STEPS COMPLETED SUCCESSFULLY!")
